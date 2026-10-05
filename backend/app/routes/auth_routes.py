@@ -13,4 +13,9 @@ auth_bp = Blueprint("auth", __name__)
 def login():
     payload = request.get_json(silent=True) or {}
     result = auth_services.login(payload)
-    return jsonify(result), 200
+
+    if isinstance(result, tuple):
+        body, status = result
+        return jsonify(body), status
+
+    return jsonify(result), 201
